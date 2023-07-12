@@ -6,27 +6,15 @@
 const DynamoDBDocumentClient = require("@aws-sdk/lib-dynamodb");
 const DynamoDB = require("aws-sdk/lib-dynamodb") ;*/
 
-const AWS = require('aws-sdk');
+/*const AWS = require('aws-sdk');
+var ddb = new AWS.DynamoDB({});*/
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
+var ddb = new DynamoDB({});
+
 const crypto = require('crypto');
 
-var ddb = new AWS.DynamoDB({});
-
-//import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-/*import {
-  DynamoDBDocumentClient,
-  ScanCommand,
-  PutCommand,
-  GetCommand,
-  DeleteCommand,
-} from "@aws-sdk/lib-dynamodb";*/
-
-//const AWS = require("aws-sdk/");
-//const client = new DynamoDBClient({});
-
-//const dynamo = DynamoDBDocumentClient.from(client);
-
-//const dynamodb = new DynamoDB();
 async function persistMail(messageId,  send_timestamp, from, to, subject, status, status_timestamp) {
+  console.log(ddb);
   //Atualiza/Insere item atual
   await ddb.putItem({
     TableName: 'ses_mail',
@@ -54,7 +42,7 @@ async function persistMail(messageId,  send_timestamp, from, to, subject, status
       }
     }
     
-  }).promise();
+  })/*.promise()*/;
 
   //Insere LOG
   await ddb.putItem({
@@ -73,9 +61,8 @@ async function persistMail(messageId,  send_timestamp, from, to, subject, status
         "S": status_timestamp
       }
     }
-  }).promise();
+  })/*.promise()*/;
 }
-
 
 module.exports.handler = async (event) => {
   //console.log(JSON.stringify(event));
